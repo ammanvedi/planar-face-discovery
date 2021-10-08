@@ -1,6 +1,6 @@
-import fs from 'fs';
-import parser from 'fast-xml-parser';
-import { InputEdges, InputNodes } from 'utils/area-graph/src/planar-face-discovery';
+import * as fs from 'fs';
+import * as parser from 'fast-xml-parser';
+import { InputEdges, InputNodes } from '../planar-face-discovery';
 
 type GraphMLResult = {
     graphml: {

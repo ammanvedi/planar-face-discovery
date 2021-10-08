@@ -1,4 +1,4 @@
-import { getAlgorithmInputs, loadGraphML } from 'utils/area-graph/src/test/loader';
+import { getAlgorithmInputs, loadGraphML } from './loader';
 import { join } from 'path';
 import {
     DiscoveryError,
@@ -6,7 +6,7 @@ import {
     InputNodes,
     PlanarFaceDiscovery,
     TreeJSON,
-} from 'utils/area-graph/src/planar-face-discovery';
+} from '../planar-face-discovery';
 
 // Generate graphml at https://graphonline.ru/en/?graph=Planar
 

@@ -1,0 +1,16 @@
+{
+  "files": ["./src/planar-face-discovery.ts"],
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["ES2015"],                                        
+    "module": "CommonJS",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true                                 
+  }
+}
