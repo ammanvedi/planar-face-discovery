@@ -40,8 +40,8 @@ export type TreeJSON = {
     children: Array<TreeJSON>;
 };
 
-export class Tree {
-    constructor(public cycle: Array<number>, public children: Array<Tree>) {}
+export class CycleTree {
+    constructor(public cycle: Array<number>, public children: CycleTreeForest) {}
 
     public isEmpty(): boolean {
         return this.cycle.length === 0 && this.children.length === 0;
@@ -57,7 +57,7 @@ export class Tree {
     }
 }
 
-export type Forest = Array<Tree>;
+export type CycleTreeForest = Array<CycleTree>;
 
 /**
  * The original code leverages c++ pointers a lot, to maintain the original
@@ -95,7 +95,7 @@ export enum DiscoveryErrorCode {
 
 export type DiscoveryResult = {
     type: DiscoveryResultType.RESULT;
-    forest: Forest;
+    forest: CycleTreeForest;
 };
 
 export type DiscoveryError = {
@@ -110,7 +110,7 @@ export class PlanarFaceDiscovery {
         positions: InputNodes,
         edges: InputEdges,
     ): DiscoveryResult | DiscoveryError {
-        const forest: Forest = [];
+        const forest: CycleTreeForest = [];
 
         const validationError = PlanarFaceDiscovery.validateInputs(positions, edges);
 
@@ -326,8 +326,8 @@ export class PlanarFaceDiscovery {
         return cycle;
     }
 
-    private extractBasis(component: Reference<Array<Vertex>>): Tree {
-        const tree = new Tree([], []);
+    private extractBasis(component: Reference<Array<Vertex>>): CycleTree {
+        const tree = new CycleTree([], []);
 
         while (component.value.length > 0) {
             this.removeFilaments(component);
@@ -416,7 +416,7 @@ export class PlanarFaceDiscovery {
         }
     }
 
-    private extractCycleFromComponent(component: Reference<Array<Vertex>>): Tree {
+    private extractCycleFromComponent(component: Reference<Array<Vertex>>): CycleTree {
         /**
          * Find left most vertex of component, ie. the one
          * with the least x value
@@ -456,7 +456,7 @@ export class PlanarFaceDiscovery {
         }
         closedWalk.value.push(vStart);
 
-        const tree: Tree = this.extractCycleFromClosedWalk(closedWalk);
+        const tree: CycleTree = this.extractCycleFromClosedWalk(closedWalk);
 
         /**
          * Cycle removal may also leave orphan vertexes, vertexes with
@@ -473,8 +473,8 @@ export class PlanarFaceDiscovery {
         return tree;
     }
 
-    private extractCycleFromClosedWalk(closedWalk: Reference<Array<Vertex>>): Tree {
-        const tree = new Tree([], []);
+    private extractCycleFromClosedWalk(closedWalk: Reference<Array<Vertex>>): CycleTree {
+        const tree = new CycleTree([], []);
 
         const duplicates = new Map<Vertex, number>();
         const detachments = new Set<number>();

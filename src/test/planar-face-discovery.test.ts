@@ -10,13 +10,17 @@ import {
 
 // Generate graphml at https://graphonline.ru/en/?graph=Planar
 
-const getResultFromFile = (graphFileName: string): Array<TreeJSON> | DiscoveryError => {
-    const file = join(__dirname, 'fixtures', graphFileName);
+export const getGMLFilePath = (file: string): string => {
+    return join(__dirname, 'fixtures', file);
+}
+
+export const getResultFromFile = (graphFileName: string): Array<TreeJSON> | DiscoveryError => {
+    const file = getGMLFilePath(graphFileName)
     const [nodes, edges] = getAlgorithmInputs(loadGraphML(file));
     return getResultFromInput(nodes, edges);
 };
 
-const getResultFromInput = (
+export const getResultFromInput = (
     nodes: InputNodes,
     edges: InputEdges,
 ): Array<TreeJSON> | DiscoveryError => {
