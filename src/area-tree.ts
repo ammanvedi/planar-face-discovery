@@ -1,9 +1,10 @@
-import {InputEdges, InputNodes, Position} from "./planar-face-discovery";
+import {CycleTreeForest, InputEdges, InputNodes, Position} from "./planar-face-discovery";
 
 type AreaTree = {
     polygonIndex: number,
     area: number,
-    children: AreaForest
+    children: AreaForest,
+    polygon: Array<number>
 }
 
 type AreaForest = Array<AreaTree>
@@ -22,30 +23,34 @@ type Polygon = {
 const traverseAreas = (
     nodes: InputNodes,
     polygons: Array<Polygon>,
-    parent: AreaTree = {area: -1, polygonIndex: -1, children: []}
+    parent: AreaTree = {area: -1, polygonIndex: -1, children: [], polygon: []},
+    pointer: number = 0
 ): AreaTree => {
     let i = 0;
-    for(let i = 0; i < polygons.length; i++) {
+    for(let i = pointer; i < polygons.length; i++) {
         const p = polygons[i];
 
         if(p.visited) {
             continue;
         }
 
-        if(parent.polygonIndex === -1 || isInside(
+        if(parent.polygonIndex === -1 || (isInside(
             nodes,
             getPointPath(nodes, p.edges)[0],
             getPointPath(nodes, polygons[parent.polygonIndex].edges)
-        )) {
+        ) && !allPointsLieOnBoundary(getPointPath(nodes, p.edges), getLinePath(
+            getPointPath(nodes, polygons[parent.polygonIndex].edges)
+        )) )) {
             const newTree: AreaTree = {
                 area: p.area,
                 polygonIndex: i,
+                polygon: p.edges,
                 children: []
             }
             p.visited = true;
             parent.children.push(newTree)
             if(polygons[i + 1]) {
-                traverseAreas(nodes, polygons.slice(i + 1), newTree)
+                traverseAreas(nodes, polygons, newTree, i + 1)
             }
         }
 
@@ -109,6 +114,39 @@ const getMaxX = (pos: Array<Position>): number => {
     })
 
     return max
+}
+
+export const pointLiesOnPolygonBoundary = (
+    point: Position,
+    polygon: Array<[Position, Position]>
+): boolean => {
+
+    for(let i = 0; i < polygon.length; i++) {
+        const [from, to] = polygon[i]
+        const winding = determineWindingOrder([from, to, point]);
+        if(winding === 'CL' && onSegment(from, point, to)) {
+            return true
+        }
+    }
+
+    return false
+
+}
+
+export const allPointsLieOnBoundary = (
+    a: Array<Position>,
+    b: Array<[Position, Position]>
+): boolean => {
+    for(let i = 0; i < a.length; i++) {
+        const aPt = a[i];
+
+        const isOnBoundary = pointLiesOnPolygonBoundary(aPt, b)
+        if (!isOnBoundary) {
+            return false
+        }
+    }
+
+    return true
 }
 
 /**
@@ -264,4 +302,14 @@ export const buildNestingTree = (
     })).sort((a, b)  => a.area - b.area)
 
     return traverseAreas(nodes, inputPolygons)
+}
+
+export const getCyclesFromCycleForest = (forest: CycleTreeForest, result: Array<Array<number>> = []): Array<Array<number>> => {
+
+    forest.forEach(tree => {
+        result.push(tree.cycle);
+        getCyclesFromCycleForest(tree.children, result);
+    });
+
+    return result.filter(arr => !!arr.length)
 }

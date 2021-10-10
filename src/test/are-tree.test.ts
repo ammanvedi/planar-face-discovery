@@ -1,6 +1,7 @@
-import {determineWindingOrder} from "../area-tree";
+import {buildNestingTree, determineWindingOrder, getCyclesFromCycleForest} from "../area-tree";
 import {getAlgorithmInputs, loadGraphML} from "./loader";
 import {getGMLFilePath} from "./planar-face-discovery.test";
+import {PlanarFaceDiscovery} from "../planar-face-discovery";
 
 describe('Area Tree', () => {
 
@@ -39,7 +40,7 @@ describe('Area Tree', () => {
     describe('buildNestingTree', () => {
         describe('when passed a valid input', () => {
             it('should produce a valid tree', () => {
-                const [nodes, edges] = getAlgorithmInputs(loadGraphML(getGMLFilePath('g8.graphml')))
+                const [nodes, edges] = getAlgorithmInputs(loadGraphML(getGMLFilePath('g10.graphml')))
                 /**
                  * TODO.
                  * 1. flatten nested trees from planar discovery
@@ -49,6 +50,28 @@ describe('Area Tree', () => {
                  * 5. make sure that we expose each stage of the pipeline so they can be used individually
                  * 6. make anything ot used by user priovatye
                  */
+                const solver = new PlanarFaceDiscovery();
+                const cycleResults = solver.discover(nodes, edges);
+
+                if(cycleResults.type === 'RESULT') {
+                    const cyclesList: Array<Array<number>> = []
+                    const cycles = getCyclesFromCycleForest(
+                        cycleResults.forest,
+                        cyclesList
+                    );
+
+                    console.log(cycles)
+
+                    const nestingTree = buildNestingTree(
+                        nodes,
+                        cycles.map(c => ({ edges: c }))
+                    )
+
+                    // TODO - if all the points of another polygon are in
+
+                    console.log(JSON.stringify(nestingTree, null, 2))
+                }
+
             })
         })
     })
