@@ -41,7 +41,10 @@ export type TreeJSON = {
 };
 
 export class CycleTree {
-    constructor(public cycle: Array<number>, public children: CycleTreeForest) {}
+    constructor(
+        public cycle: Array<number>,
+        public children: CycleTreeForest,
+    ) {}
 
     public isEmpty(): boolean {
         return this.cycle.length === 0 && this.children.length === 0;
@@ -68,7 +71,7 @@ export type CycleTreeForest = Array<CycleTree>;
  */
 export type Reference<T> = { value: T };
 
-export class Vertex {
+class Vertex {
     visited: 0 | 1 | 2 = 0;
     adjacent: Set<Vertex> = new Set<Vertex>();
 
@@ -79,7 +82,7 @@ export class Vertex {
     }
 }
 
-enum DiscoveryResultType {
+export enum DiscoveryResultType {
     ERROR = 'ERROR',
     RESULT = 'RESULT',
 }
@@ -103,7 +106,7 @@ export type DiscoveryError = {
     reason: DiscoveryErrorCode;
 };
 
-export class PlanarFaceDiscovery {
+export class PlanarFaceTree {
     vertexStore: Array<Vertex> = [];
 
     public discover(
@@ -112,7 +115,7 @@ export class PlanarFaceDiscovery {
     ): DiscoveryResult | DiscoveryError {
         const forest: CycleTreeForest = [];
 
-        const validationError = PlanarFaceDiscovery.validateInputs(positions, edges);
+        const validationError = PlanarFaceTree.validateInputs(positions, edges);
 
         if (validationError) {
             return validationError;
@@ -170,7 +173,7 @@ export class PlanarFaceDiscovery {
         this.vertexStore.forEach((vInitial) => {
             if (vInitial.visited === 0) {
                 components.push({ value: [] });
-                PlanarFaceDiscovery.depthFirstSearch(
+                PlanarFaceTree.depthFirstSearch(
                     vInitial,
                     components[components.length - 1],
                 );
@@ -291,7 +294,9 @@ export class PlanarFaceDiscovery {
         }
     }
 
-    private static extractCycle(closedWalk: Reference<Array<Vertex>>): Array<number> {
+    private static extractCycle(
+        closedWalk: Reference<Array<Vertex>>,
+    ): Array<number> {
         const numVertices = closedWalk.value.length;
         const cycle: Array<number> = [];
         for (let i = 0; i < numVertices; ++i) {
@@ -386,7 +391,9 @@ export class PlanarFaceDiscovery {
                          *
                          * i.e we keep deleting from v0 until v3
                          */
-                        const adjacent = Array.from(vertex.adjacent.values())[0];
+                        const adjacent = Array.from(
+                            vertex.adjacent.values(),
+                        )[0];
                         /**
                          * Delete the edge in both directions since we assume
                          * an undirected graph
@@ -416,7 +423,9 @@ export class PlanarFaceDiscovery {
         }
     }
 
-    private extractCycleFromComponent(component: Reference<Array<Vertex>>): CycleTree {
+    private extractCycleFromComponent(
+        component: Reference<Array<Vertex>>,
+    ): CycleTree {
         /**
          * Find left most vertex of component, ie. the one
          * with the least x value
@@ -473,7 +482,9 @@ export class PlanarFaceDiscovery {
         return tree;
     }
 
-    private extractCycleFromClosedWalk(closedWalk: Reference<Array<Vertex>>): CycleTree {
+    private extractCycleFromClosedWalk(
+        closedWalk: Reference<Array<Vertex>>,
+    ): CycleTree {
         const tree = new CycleTree([], []);
 
         const duplicates = new Map<Vertex, number>();
@@ -510,7 +521,9 @@ export class PlanarFaceDiscovery {
                 const original: Vertex = closedWalk.value[i];
                 const maxVertex: Vertex = closedWalk.value[i + 1];
                 const minVertex =
-                    i > 0 ? closedWalk.value[i - 1] : closedWalk.value[numClosedWalk - 2];
+                    i > 0
+                        ? closedWalk.value[i - 1]
+                        : closedWalk.value[numClosedWalk - 2];
 
                 const dMin: [number, number] = [0, 0];
                 const dMax: [number, number] = [0, 0];
@@ -520,7 +533,8 @@ export class PlanarFaceDiscovery {
                     dMax[j] = maxVertex.position[j] - original.position[j];
                 }
 
-                const isConvex: boolean = dMax[0] * dMin[1] >= dMax[1] * dMin[0];
+                const isConvex: boolean =
+                    dMax[0] * dMin[1] >= dMax[1] * dMin[0];
 
                 const inWedge = new Set<Vertex>();
                 const adjacent: Set<Vertex> = original.adjacent;
@@ -557,7 +571,9 @@ export class PlanarFaceDiscovery {
                 });
 
                 if (inWedge.size > 0) {
-                    const clone = new Vertex(original.name, [...original.position]);
+                    const clone = new Vertex(original.name, [
+                        ...original.position,
+                    ]);
                     this.vertexStore.push(clone);
 
                     inWedge.forEach((vertex) => {
@@ -571,13 +587,13 @@ export class PlanarFaceDiscovery {
                         value: [],
                     };
 
-                    PlanarFaceDiscovery.depthFirstSearch(clone, component);
+                    PlanarFaceTree.depthFirstSearch(clone, component);
 
                     tree.children.push(this.extractBasis(component));
                 }
             });
 
-            tree.cycle = PlanarFaceDiscovery.extractCycle(closedWalk);
+            tree.cycle = PlanarFaceTree.extractCycle(closedWalk);
         } else {
             const original = closedWalk.value[0];
             const adjacent = closedWalk.value[1];
@@ -591,7 +607,7 @@ export class PlanarFaceDiscovery {
             adjacent.adjacent.add(clone);
 
             const component: Reference<Array<Vertex>> = { value: [] };
-            PlanarFaceDiscovery.depthFirstSearch(clone, component);
+            PlanarFaceTree.depthFirstSearch(clone, component);
             tree.children.push(this.extractBasis(component));
 
             if (tree.cycle.length === 0 && tree.children.length === 1) {
@@ -656,10 +672,13 @@ export class PlanarFaceDiscovery {
             }
         });
 
-        return (vNext as unknown) as Vertex;
+        return vNext as unknown as Vertex;
     }
 
-    private getCounterClockwiseMost(vPrev: Vertex | null, vCurr: Vertex): Vertex {
+    private getCounterClockwiseMost(
+        vPrev: Vertex | null,
+        vCurr: Vertex,
+    ): Vertex {
         let vNext: Vertex | null = null;
         let vCurrConvex = false;
         const dCurr: [number, number] = [0, 0];
@@ -711,6 +730,6 @@ export class PlanarFaceDiscovery {
             }
         });
 
-        return (vNext as unknown) as Vertex;
+        return vNext as unknown as Vertex;
     }
 }

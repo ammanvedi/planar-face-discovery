@@ -1,5 +1,7 @@
 {
-  "files": ["./src/planar-face-discovery.ts"],
+  "files": [
+    "./src/planar-face-tree.ts"
+  ],
   "compilerOptions": {
     "target": "es5",
     "lib": ["ES2015"],                                        

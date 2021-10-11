@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as parser from 'fast-xml-parser';
-import { InputEdges, InputNodes } from '../planar-face-discovery';
+import { InputEdges, InputNodes } from '../planar-face-tree';
 
 type GraphMLResult = {
     graphml: {

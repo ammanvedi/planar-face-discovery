@@ -4,9 +4,9 @@ import {
     DiscoveryError,
     InputEdges,
     InputNodes,
-    PlanarFaceDiscovery,
+    PlanarFaceTree,
     TreeJSON,
-} from '../planar-face-discovery';
+} from '../planar-face-tree';
 
 // Generate graphml at https://graphonline.ru/en/?graph=Planar
 
@@ -24,7 +24,7 @@ export const getResultFromInput = (
     nodes: InputNodes,
     edges: InputEdges,
 ): Array<TreeJSON> | DiscoveryError => {
-    const solver = new PlanarFaceDiscovery();
+    const solver = new PlanarFaceTree();
     const result = solver.discover(nodes, edges);
 
     return result.type === 'RESULT' ? result.forest.map((t) => t.toJSON()) : result;
