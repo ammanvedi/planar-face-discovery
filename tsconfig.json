@@ -1,18 +1,8 @@
 {
-  "files": [
-    "./src/planar-face-tree.ts"
-  ],
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["ES2015"],                                        
-    "module": "CommonJS",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "./dist",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    "target": "es6",
+    "lib": ["es2015"],
     "strict": true,
-    "skipLibCheck": true                                 
+    "types": ["@types/node"]
   }
 }

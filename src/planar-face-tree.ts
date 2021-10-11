@@ -69,7 +69,7 @@ export type CycleTreeForest = Array<CycleTree>;
  * The idea behind this implementation is to NOT diverge from the C++
  * implementation
  */
-export type Reference<T> = { value: T };
+type Reference<T> = { value: T };
 
 class Vertex {
     visited: 0 | 1 | 2 = 0;
