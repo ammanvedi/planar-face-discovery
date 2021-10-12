@@ -13,6 +13,9 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '12.22.1'
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+            token: ${{ secrets.NPM_TOKEN }}
       - run: |
           echo "Running NPM Install"
           npm install
@@ -20,8 +23,17 @@ jobs:
           npm test
           echo "Building Library"
           npm run build
-          echo "Incrementing package.json version"
+          echo "Incrementing version"
           npm version ${{ github.event.inputs.version }}
-
-          echo "Creating git tag ${{ github.event.inputs.version }}"
-          git tag -a
+          echo "Pushing Version Change"
+          git config --global user.name 'Release Workflow'
+          git config --global user.email 'release-workflow@users.noreply.github.com'
+          git push --follow-tags
+          echo "Publishing to NPM"
+      - id: publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+      - if: steps.publish.outputs.type != 'none'
+        run: |
+          echo "Published Version: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
