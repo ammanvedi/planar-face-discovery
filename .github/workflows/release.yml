@@ -5,8 +5,6 @@ on:
         version:
           description: "<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease"
           required: true
-env:
-  INPUT_TOKEN: ''
 jobs:
   Release-To-NPM:
     runs-on: ubuntu-latest
