@@ -21,11 +21,11 @@ jobs:
           npm test
           echo "Building Library"
           npm run build
+          git config --global user.name 'Release Workflow'
+          git config --global user.email 'release-workflow@users.noreply.github.com'
           echo "Incrementing version"
           npm version ${{ github.event.inputs.version }}
           echo "Pushing Version Change"
-          git config --global user.name 'Release Workflow'
-          git config --global user.email 'release-workflow@users.noreply.github.com'
           git push --follow-tags
           echo "Publishing to NPM"
       - run: npm publish
