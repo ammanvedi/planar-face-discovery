@@ -5,6 +5,8 @@ on:
         version:
           description: "<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease"
           required: true
+env:
+  INPUT_TOKEN: ''
 jobs:
   Release-To-NPM:
     runs-on: ubuntu-latest
@@ -13,9 +15,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '12.22.1'
-      - uses: JS-DevTools/npm-publish@v1
-        with:
-            token: ${{ secrets.NPM_TOKEN }}
+          registry-url: 'https://registry.npmjs.org'
       - run: |
           echo "Running NPM Install"
           npm install
@@ -30,10 +30,6 @@ jobs:
           git config --global user.email 'release-workflow@users.noreply.github.com'
           git push --follow-tags
           echo "Publishing to NPM"
-      - id: publish
-        uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-      - if: steps.publish.outputs.type != 'none'
-        run: |
-          echo "Published Version: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
