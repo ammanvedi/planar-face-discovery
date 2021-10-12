@@ -1,0 +1,27 @@
+name: Release
+on:
+  workflow_dispatch:
+      inputs:
+        version:
+          description: "<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease"
+          required: true
+jobs:
+  Release-To-NPM:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12.22.1'
+      - run: |
+          echo "Running NPM Install"
+          npm install
+          echo "Running Tests"
+          npm test
+          echo "Building Library"
+          npm run build
+          echo "Incrementing package.json version"
+          npm version ${{ github.event.inputs.version }}
+
+          echo "Creating git tag ${{ github.event.inputs.version }}"
+          git tag -a

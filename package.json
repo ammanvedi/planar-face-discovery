@@ -4,7 +4,7 @@
   "description": "Given a planar, undirected, graph enumerate all of the faces of the graph. Can also be described as finding all of the polygons within the graph, or the minimum cycle basis",
   "scripts": {
     "test": "./node_modules/.bin/jest",
-    "build": "./node_modules/.bin/parcel build"
+    "build": "./node_modules/.bin/tsc"
   },
   "files": [
     "src/**/*",
@@ -24,14 +24,10 @@
   ],
   "author": "amman.vedi@gmail.com, David Eberly, Geometric Tools Team (Redmond WA)",
   "license": "CC-BY-4.0",
-  "main": "./dist/planar-face-discovery.js",
-  "types": "./dist/planar-face-discovery.d.ts",
-  "source": "./src/index.ts",
+  "main": "./dist",
+  "types": "./dist/index.d.ts",
   "devDependencies": {
-    "@parcel/transformer-typescript-tsc": "2.0.0-nightly.826",
-    "@parcel/transformer-typescript-types": "2.0.0-nightly.826",
     "@types/jest": "^27.0.2",
-    "@types/node": "^16.10.3",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^8.0.0",
@@ -39,7 +35,6 @@
     "eslint-plugin-prettier": "^4.0.0",
     "fast-xml-parser": "^3.20.3",
     "jest": "^27.2.5",
-    "parcel": "2.0.0-nightly.824",
     "prettier": "^2.4.1",
     "ts-jest": "^27.0.5",
     "typescript": "^4.4.2"

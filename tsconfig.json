@@ -1,8 +1,14 @@
 {
+  "include": ["src/**/*"],
+  "exclude": ["src/test/**/*"],
   "compilerOptions": {
-    "target": "es6",
+    "outDir": "dist",
+    "module": "CommonJS",
+    "declaration": true,
+    "target": "es5",
     "lib": ["es2015"],
     "strict": true,
-    "types": ["@types/node"]
+    "sourceMap": true,
+    "declarationMap": true
   }
 }
