@@ -76,10 +76,6 @@ class Vertex {
     adjacent: Set<Vertex> = new Set<Vertex>();
 
     constructor(public name: number, public position: Position) {}
-
-    isLessThan(v: Vertex): boolean {
-        return this.name < v.name;
-    }
 }
 
 export enum DiscoveryResultType {
@@ -90,7 +86,6 @@ export enum DiscoveryResultType {
 export enum DiscoveryErrorCode {
     INVALID_COORDINATE_SYSTEM = 'INVALID_COORDINATE_SYSTEM',
     EDGE_ENDPOINT_OUT_OF_BOUNDS = 'EDGE_ENDPOINT_OUT_OF_BOUNDS',
-    GRAPH_IS_NOT_PLANAR = 'GRAPH_IS_NOT_PLANAR', // TODO
     VERTICES_HAVE_SAME_POSITION = 'VERTICES_HAVE_SAME_POSITION',
     DUPLICATE_EDGE_FOUND = 'DUPLICATE_EDGE_FOUND',
     GRAPH_EMPTY = 'GRAPH_EMPTY',

@@ -15,19 +15,13 @@ jobs:
           node-version: '12.22.1'
           registry-url: 'https://registry.npmjs.org'
       - run: |
-          echo "Running NPM Install"
           npm install
-          echo "Running Tests"
           npm test
-          echo "Building Library"
           npm run build
           git config --global user.name 'Release Workflow'
           git config --global user.email 'release-workflow@users.noreply.github.com'
-          echo "Incrementing version"
           npm version ${{ github.event.inputs.version }}
-          echo "Pushing Version Change"
           git push --follow-tags
-          echo "Publishing to NPM"
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
