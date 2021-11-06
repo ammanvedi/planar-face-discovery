@@ -1,6 +1,6 @@
 {
   "name": "planar-face-discovery",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Given a planar, undirected, graph enumerate all of the faces of the graph. Can also be described as finding all of the polygons within the graph, or the minimum cycle basis",
   "scripts": {
     "test": "./node_modules/.bin/jest",
