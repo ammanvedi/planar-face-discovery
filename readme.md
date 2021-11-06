@@ -89,7 +89,7 @@ Trees can be converted to JSON via their toJSON method, an example output will l
 
 With the cycle indicating the path of vertices for each enclosed shape or "face"
 
-### 2. getAreaTree
+## 2. getAreaTree
 Get the faces formed by the graph in a tree structure where each has an area 
 attached which is calculated exclusive of the areas of its children.
 
