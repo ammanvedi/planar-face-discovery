@@ -21,18 +21,21 @@ Determine the following closed regions;
 ### Installation
 
 ```bash
-npm install planar-face-discovery
+npm install --save planar-face-discovery
 ```
 
 
 ## Usage
 
+## 1. PlanarFaceTree
+This exposes the raw algorithm to find the faces of the graph.
+
 ### Input
 
 ```typescript
-import { PlanarFaceDiscovery } from "planar-face-discovery";
+import { PlanarFaceTree } from "planar-face-discovery";
 
-const solver = new PlanarFaceDiscovery();
+const solver = new PlanarFaceTree();
 
 /**
  * Each node is defined by its [X,Y] position.
@@ -60,7 +63,7 @@ const result = solver.discover(nodes, edges)
 
 ```
 
-### Output
+#### Output
 
 The output of the algorithm is a set of trees, aptly named a "forest". Each tree will contain a cycle and/or child cycles
 
@@ -86,6 +89,43 @@ Trees can be converted to JSON via their toJSON method, an example output will l
 
 With the cycle indicating the path of vertices for each enclosed shape or "face"
 
+### 2. getAreaTree
+Get the faces formed by the graph in a tree structure where each has an area 
+attached which is calculated exclusive of the areas of its children.
+
+The nodes and edges values are the same as described for `PlanarFaceTree`
+
+```typescript
+import { getAreaTree } from "planar-face-discovery";
+
+const result = getAreaTree(nodes, edges)
+
+```
+
+#### Output
+
+```JSON
+{
+  "type": "ROOT",
+  "children": [
+    {
+      "type": "CHILD",
+      "polygonIndex": 1,
+      "area": {
+        "total": 100,
+        "withoutChildren": 40
+      },
+      "polygon": [
+        1,
+        4,
+        5,
+        7
+      ],
+      "children": [...]
+    }
+  ]
+}
+```
 
 ## Acknowledgement 
 
