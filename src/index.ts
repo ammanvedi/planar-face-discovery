@@ -14,4 +14,11 @@ export {
     InputEdge,
 } from './planar-face-tree';
 
-export { getAreaTree } from './area-tree';
+export {
+    getAreaTree,
+    AreaTreeType,
+    AreaTree,
+    AreaTreeRoot,
+    AreaTreeChild,
+    Polygon,
+} from './area-tree';

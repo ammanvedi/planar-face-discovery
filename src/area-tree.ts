@@ -19,12 +19,12 @@ export enum AreaTreeType {
     ROOT = 'ROOT',
 }
 
-type AreaTreeRoot = {
+export type AreaTreeRoot = {
     type: AreaTreeType.ROOT;
     children: Array<AreaTreeChild>;
 };
 
-type AreaTreeChild = {
+export type AreaTreeChild = {
     type: AreaTreeType.CHILD;
     polygonIndex: number;
     area: {
@@ -35,9 +35,9 @@ type AreaTreeChild = {
     polygon: Array<number>;
 };
 
-type AreaTree = AreaTreeChild | AreaTreeRoot;
+export type AreaTree = AreaTreeChild | AreaTreeRoot;
 
-type Polygon = {
+export type Polygon = {
     id: number;
     visited: boolean;
     area: number;
