@@ -232,7 +232,7 @@ export class PlanarFaceTree {
         for (let i = 0; i < edges.length; i++) {
             const edge = edges[i];
 
-            const key = `${edge[0]}${edge[1]}`;
+            const key = `${edge[0]}->${edge[1]}`;
             if (edgeKeys.has(key)) {
                 return {
                     type: DiscoveryResultType.ERROR,
