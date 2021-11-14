@@ -208,7 +208,7 @@ export class PlanarFaceTree {
         for (let j = 0; j < positions.length; j++) {
             const position = positions[j];
 
-            const key = `${position[0]}${position[1]}`;
+            const key = `${position[0]}->${position[1]}`;
 
             if (posKeys.has(key)) {
                 return {
